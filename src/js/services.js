@@ -1,4 +1,4 @@
-angular.module('starter.services', [])
+angular.module('reddit-demo')
 
 .factory('DataSvc', function($http, $ionicPopup) {
   const baseUrl = 'https://www.reddit.com/r/';
@@ -16,7 +16,6 @@ angular.module('starter.services', [])
   };
 
   function getData(res) {
-    console.log(res.data);
     return res.data;
   }
 

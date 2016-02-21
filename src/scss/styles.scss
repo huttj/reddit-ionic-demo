@@ -6,3 +6,19 @@
   }
   background-image: none;
 }
+
+.img {
+  width: calc(100% - 1em);
+  margin: 0 .5em .5em .5em;
+  border-radius: 2px;
+  box-shadow: 2px 2px 4px rgba(0,0,0,.2);
+}
+
+.fullview {
+  min-width: 100%;
+  height: auto;
+}
+
+.fullview.fit {
+  width: 100%;
+}

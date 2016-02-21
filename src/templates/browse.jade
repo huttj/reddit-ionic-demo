@@ -1,3 +1,19 @@
-ion-view(view-title='Browse')
-  ion-content
-    h1 Browse
+ion-view(view-title='{{form.subreddit}}')
+
+  ion-content(style="top: 97px;")
+    .row
+      .col-50(style="padding-top: .5em;")
+        div(ng-repeat="item in items" ng-if="$index % 2")
+          img.img(ng-src="{{item.data.thumbnail}}" ng-click="showFullview(item)")
+      .col-50(style="padding-top: .5em;")
+        div(ng-repeat="item in items" ng-if="!($index % 2)")
+          img.img(ng-src="{{item.data.thumbnail}}" ng-click="showFullview(item)")
+
+    ion-infinite-scroll(icon="ion-loading-c" on-infinite="loadMore(form.subreddit)")
+
+  form(ng-submit="load(form.subreddit)" style="position: fixed; top: 43px; width: 100%;")
+    .list
+      .item.item-input-inset
+        label.item-input-wrapper
+          input(type="text" placeholder="pics" ng-model="form.subreddit")
+        button.button.button-small Load

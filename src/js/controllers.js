@@ -1,4 +1,4 @@
-angular.module('starter.controllers', [])
+angular.module('reddit-demo')
 
 .controller('AppCtrl', function($scope, $ionicModal, $timeout) {
 
@@ -9,39 +9,9 @@ angular.module('starter.controllers', [])
   //$scope.$on('$ionicView.enter', function(e) {
   //});
 
-  // Form data for the login modal
-  $scope.loginData = {};
-
-  // Create the login modal that we will use later
-  $ionicModal.fromTemplateUrl('templates/login.html', {
-    scope: $scope
-  }).then(function(modal) {
-    $scope.modal = modal;
-  });
-
-  // Triggered in the login modal to close it
-  $scope.closeLogin = function() {
-    $scope.modal.hide();
-  };
-
-  // Open the login modal
-  $scope.login = function() {
-    $scope.modal.show();
-  };
-
-  // Perform the login action when the user submits the login form
-  $scope.doLogin = function() {
-    console.log('Doing login', $scope.loginData);
-
-    // Simulate a login delay. Remove this and replace with your login
-    // code if using a login system
-    $timeout(function() {
-      $scope.closeLogin();
-    }, 1000);
-  };
 })
 
-.controller('PlaylistsCtrl', function($scope, DataSvc) {
+.controller('BrowseCtrl', function($scope, $ionicModal, DataSvc) {
   let after;
   $scope.form = {
     subreddit: 'pics'
@@ -50,8 +20,10 @@ angular.module('starter.controllers', [])
 
   $scope.load = function(subreddit) {
     DataSvc.list(subreddit)
-      .then(res => $scope.items = res.data.children.filter(canDisplay))
-      .then(items => $scope.items = items);
+      .then(res => {
+        after = res.data.after;
+        return $scope.items = res.data.children.filter(canDisplay)
+      })
   };
 
   function canDisplay(item) {
@@ -67,11 +39,28 @@ angular.module('starter.controllers', [])
       });
   };
 
-  $scope.$on('$stateChangeSuccess', function() {
-    $scope.load($scope.form.subreddit);
-  });
+  //$scope.$on('$stateChangeSuccess', function() {
+  //  $scope.load($scope.form.subreddit);
+  //});
 
-})
+  $ionicModal.fromTemplateUrl('templates/fullview.html', {
+    scope: $scope,
+    animation: 'slide-in-up'
+  }).then(modal => $scope.fullviewModal = modal);
 
-.controller('PlaylistCtrl', function($scope, $stateParams) {
+  $scope.showFullview = function(item) {
+    let url = item.data.url;
+
+    if (url.match(/\/[^.]+$/)) {
+      url += '.jpg';
+    }
+
+    $scope.fullview = url;
+    $scope.fullviewModal.show();
+  };
+
+  $scope.toggleFit = function() {
+    $scope.fit = !$scope.fit;
+  }
+
 });
